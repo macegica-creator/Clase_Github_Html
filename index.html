@@ -1,11 +1,367 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superenvíos de Colombia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fb;
+      margin: 40px;
+    }
+
+    /* === ENCABEZADO === */
+    .encabezado {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      margin-bottom: 25px;
+      background-color: #ffffff;
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      width: 90px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.15);
+      order: 2;
+    }
+
+    h1 {
+      order: 1;
+      text-align: center;
+      color: #004080;
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    /* === FORMULARIO === */
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: 0 auto 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-end;
+    }
+
+    .campo {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 200px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ed7474;
+      border-radius: 6px;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    .botones {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    /* === BOTONES PRINCIPALES === */
+    button {
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      border: 2px solid black; /* ✅ recuadro negro */
+      transition: transform 0.1s ease, opacity 0.2s ease;
+    }
+
+    #agregarBtn { background-color: #28a745; color: black; }
+    #limpiarBtn { background-color: #cbe00d; color: black; }
+    #limpiarTablaBtn { background-color: #dc3545; color: black; }
+
+    button:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    /* === MENSAJE === */
+    .mensaje {
+      text-align: right;
+      font-size: 0.9rem;
+      color: green;
+      margin: 8px 0 10px 0;
+      font-style: italic;
+      padding-right: 10px;
+    }
+
+    /* === TABLA === */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    /* === ENCABEZADO CON DEGRADADO AZUL === */
+    th {
+      background: linear-gradient(to right, #2900cc, #0099ff);
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    .btn-editar {
+      background-color: #323be9;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-eliminar {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* === MODAL === */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-contenido {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      animation: aparecer 0.3s ease;
+    }
+
+    @keyframes aparecer {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-contenido h2 {
+      text-align: center;
+      color: #004080;
+      margin-bottom: 10px;
+    }
+
+    .modal-botones {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+
+    .btn-guardar { background-color: #28a745; color: white; }
+    .btn-cancelar { background-color: #dc3545; color: white; }
+  </style>
 </head>
+
 <body>
-    
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+    <h1>Superenvíos de Colombia</h1>
+    <img src="imagenes/logotipo_superenvios.jpg" alt="Logotipo Superenvíos" class="logo">
+  </header>
+
+  <!-- FORMULARIO -->
+  <form id="formEnvio">
+    <div class="campo">
+      <label for="destinatario">Destinatario:</label>
+      <input type="text" id="destinatario" placeholder="Nombre completo / razón social" required>
+    </div>
+
+    <div class="campo">
+      <label for="direccion">Dirección:</label>
+      <input type="text" id="direccion" placeholder="Dirección" required>
+    </div>
+
+    <div class="campo">
+      <label for="ciudad">Ciudad:</label>
+      <input type="text" id="ciudad" placeholder="Ciudad, Dpto, País" required>
+    </div>
+
+    <div class="campo" style="flex: 1 1 100%;">
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" rows="2" placeholder="Detalle del documento o paquete a enviar" required></textarea>
+    </div>
+
+    <div class="botones">
+      <button type="button" id="agregarBtn">Agregar Envío</button>
+      <button type="button" id="limpiarBtn">Limpiar</button>
+      <button type="button" id="limpiarTablaBtn">Limpiar Tabla</button>
+    </div>
+  </form>
+
+  <p class="mensaje">Trabajas en la mejor empresa de envíos de toda Colombia</p>
+
+  <table id="tablaEnvios">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Destinatario</th>
+        <th>Dirección</th>
+        <th>Ciudad</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- MODAL -->
+  <div id="modalEditar" class="modal">
+    <div class="modal-contenido">
+      <h2>Editar Envío</h2>
+      <label>Destinatario:</label>
+      <input type="text" id="editDestinatario">
+      <label>Dirección:</label>
+      <input type="text" id="editDireccion">
+      <label>Ciudad:</label>
+      <input type="text" id="editCiudad">
+      <label>Descripción:</label>
+      <textarea id="editDescripcion" rows="2"></textarea>
+      <div class="modal-botones">
+        <button class="btn-guardar" id="guardarCambiosBtn">Guardar Cambios</button>
+        <button class="btn-cancelar" id="cancelarBtn">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let contador = 0;
+    let filaEditando = null;
+    const tabla = document.querySelector("#tablaEnvios tbody");
+    const btnAgregar = document.getElementById("agregarBtn");
+    const btnLimpiar = document.getElementById("limpiarBtn");
+    const btnLimpiarTabla = document.getElementById("limpiarTablaBtn");
+    const form = document.getElementById("formEnvio");
+    const modal = document.getElementById("modalEditar");
+    const btnGuardar = document.getElementById("guardarCambiosBtn");
+    const btnCancelar = document.getElementById("cancelarBtn");
+
+    btnLimpiar.addEventListener("click", () => form.reset());
+    btnLimpiarTabla.addEventListener("click", () => {
+      if (tabla.rows.length === 0) {
+        alert("No hay envíos para eliminar.");
+        return;
+      }
+      const confirmar = confirm("¿Deseas eliminar todos los envíos de la tabla?");
+      if (confirmar) {
+        tabla.innerHTML = "";
+        contador = 0;
+      }
+    });
+
+    btnAgregar.addEventListener("click", () => {
+      const destinatario = document.getElementById("destinatario").value.trim();
+      const direccion = document.getElementById("direccion").value.trim();
+      const ciudad = document.getElementById("ciudad").value.trim();
+      const descripcion = document.getElementById("descripcion").value.trim();
+      if (!destinatario || !direccion || !ciudad || !descripcion) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+      contador++;
+      const fila = tabla.insertRow();
+      fila.insertCell(0).textContent = contador;
+      fila.insertCell(1).textContent = destinatario;
+      fila.insertCell(2).textContent = direccion;
+      fila.insertCell(3).textContent = ciudad;
+      fila.insertCell(4).textContent = descripcion;
+      const celdaAcciones = fila.insertCell(5);
+      celdaAcciones.innerHTML = `
+        <button class="btn-editar">Editar</button>
+        <button class="btn-eliminar">Eliminar</button>
+      `;
+      celdaAcciones.querySelector(".btn-eliminar").addEventListener("click", () => {
+        const confirmar = confirm("¿Deseas eliminar este envío?");
+        if (confirmar) {
+          tabla.removeChild(fila);
+          reenumerar();
+        }
+      });
+      celdaAcciones.querySelector(".btn-editar").addEventListener("click", () => {
+        filaEditando = fila;
+        document.getElementById("editDestinatario").value = fila.cells[1].textContent;
+        document.getElementById("editDireccion").value = fila.cells[2].textContent;
+        document.getElementById("editCiudad").value = fila.cells[3].textContent;
+        document.getElementById("editDescripcion").value = fila.cells[4].textContent;
+        modal.style.display = "flex";
+      });
+      form.reset();
+    });
+
+    btnGuardar.addEventListener("click", () => {
+      if (filaEditando) {
+        filaEditando.cells[1].textContent = document.getElementById("editDestinatario").value;
+        filaEditando.cells[2].textContent = document.getElementById("editDireccion").value;
+        filaEditando.cells[3].textContent = document.getElementById("editCiudad").value;
+        filaEditando.cells[4].textContent = document.getElementById("editDescripcion").value;
+        filaEditando = null;
+      }
+      modal.style.display = "none";
+    });
+
+    btnCancelar.addEventListener("click", () => {
+      modal.style.display = "none";
+      filaEditando = null;
+    });
+
+    window.addEventListener("click", e => {
+      if (e.target === modal) modal.style.display = "none";
+    });
+
+    function reenumerar() {
+      const filas = tabla.rows;
+      for (let i = 0; i < filas.length; i++) {
+        filas[i].cells[0].textContent = i + 1;
+      }
+      contador = filas.length;
+    }
+  </script>
 </body>
 </html>
